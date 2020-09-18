@@ -48,6 +48,8 @@ Folder /maps contains the map created with optitrack (map_optitrack.pgm) and the
      v        v
 os1_lidar  pixhawk_imu
 
+
+
 ------------------------------------------------------------------------------------------
 ## Structure of the tf tree for gmapping_visual.launch 	 
 ------------------------------------------------------------------------------------------
@@ -73,6 +75,8 @@ os1_lidar  pixhawk_imu
      v        v
 os1_lidar  pixhawk_imu
  
+
+
 
 ------------------------------------------------------------------------------------------
 ## Structure of the tf tree for nav_stack.launch 	 
