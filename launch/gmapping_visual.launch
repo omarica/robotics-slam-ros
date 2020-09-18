@@ -1,0 +1,154 @@
+<launch>
+  <!-- GMAPPING WITH VISUAL ODOMETRY FUSED WITH IMU-->
+  <arg name="scan_topic"  default="/scan" />
+  <arg name="map_frame"  default="map_global"/>
+  <arg name="base_frame"  default="camera_pose_frame"/>
+  <arg name="odom_frame"  default="camera_odom_frame"/>
+
+  <param name="/use_sim_time" value="true"/>
+
+  <!--  ************** static_tf  ***************  -->
+
+  <node pkg="tf" type="static_transform_publisher" name="lidar_camera" args="-0.675 -0.008 0.96 0 0 0 camera_pose_frame os1_sensor 100" />
+  <node pkg="tf" type="static_transform_publisher" name="os1_lidar" args="0 0 0.03618 0 0 1 0 os1_sensor os1_lidar 100" />
+
+  <!--  ************** pointcloud_to_laserscan  ***************  -->
+
+  <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_laserscan">
+    <remap from="cloud_in" to="/os1_cloud_node/points"/>
+  </node>
+
+  <!--  ************** robot_localization  ***************  -->
+
+<node name="ekf_node" pkg="robot_localization" type="ekf_localization_node" clear_params="true">
+
+      <param name="sensor_timeout" value="10"/>
+      <param name="two_d_mode" value="true"/>
+
+      <param name="map_frame" value="map_global"/>
+      <param name="odom_frame" value="camera_odom_frame"/>
+      <param name="base_link_frame" value="camera_pose_frame"/>
+      <param name="world_frame" value="camera_odom_frame"/>
+
+      <param name="predict_to_current_time" value="true"/>
+
+      <param name="transform_time_offset" value="0.01"/>
+      <param name="transform_timeout" value="0.01"/>
+
+      <param name="odom0" value="/camera/odom/sample"/>
+      <param name="imu0" value="/mavros/imu/data_raw"/>
+
+      <rosparam param="imu0_config">
+          [false, false, false,
+           true, true, true,
+           false, false, false,
+           true, true, true,
+           true, true, true]
+        </rosparam>
+
+        <rosparam param="odom0_config">
+         [true, true, true,
+          true, true, true,
+          false, false, false,
+          false, false, false,
+          false, false, false]</rosparam>
+
+      <param name="odom0_differential" value="false"/>
+      <param name="imu0_differential" value="false"/>
+
+      <param name="odom0_relative" value="false"/>
+      <param name="imu0_relative" value="false"/>
+
+      <param name="imu0_remove_gravitational_acceleration" value="true"/>
+
+      <param name="print_diagnostics" value="true"/>
+
+      <param name="odom0_queue_size" value="500"/>
+
+      <param name="debug"           value="false"/>
+      <param name="debug_out_file"  value="debug_ekf_localization.txt"/>
+
+      <rosparam param="process_noise_covariance">[0.05, 0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                                                  0,    0.05, 0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                                                  0,    0,    0.06, 0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                                                  0,    0,    0,    0.03, 0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                                                  0,    0,    0,    0,    0.03, 0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                                                  0,    0,    0,    0,    0,    0.06, 0,     0,     0,    0,    0,    0,    0,    0,    0,
+                                                  0,    0,    0,    0,    0,    0,    0.025, 0,     0,    0,    0,    0,    0,    0,    0,
+                                                  0,    0,    0,    0,    0,    0,    0,     0.025, 0,    0,    0,    0,    0,    0,    0,
+                                                  0,    0,    0,    0,    0,    0,    0,     0,     0.04, 0,    0,    0,    0,    0,    0,
+                                                  0,    0,    0,    0,    0,    0,    0,     0,     0,    0.01, 0,    0,    0,    0,    0,
+                                                  0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0.01, 0,    0,    0,    0,
+                                                  0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0.02, 0,    0,    0,
+                                                  0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0.01, 0,    0,
+                                                  0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0.01, 0,
+                                                  0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0.015]</rosparam>
+
+      <rosparam param="initial_estimate_covariance">[1e-9, 0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                                                     0,    1e-9, 0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                                                     0,    0,    1e-9, 0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                                                     0,    0,    0,    1e-9, 0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                                                     0,    0,    0,    0,    1e-9, 0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                                                     0,    0,    0,    0,    0,    1e-9, 0,    0,    0,    0,     0,     0,     0,    0,    0,
+                                                     0,    0,    0,    0,    0,    0,    1e-9, 0,    0,    0,     0,     0,     0,    0,    0,
+                                                     0,    0,    0,    0,    0,    0,    0,    1e-9, 0,    0,     0,     0,     0,    0,    0,
+                                                     0,    0,    0,    0,    0,    0,    0,    0,    1e-9, 0,     0,     0,     0,    0,    0,
+                                                     0,    0,    0,    0,    0,    0,    0,    0,    0,    1e-9,  0,     0,     0,    0,    0,
+                                                     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     1e-9,  0,     0,    0,    0,
+                                                     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     1e-9,  0,    0,    0,
+                                                     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     1e-9, 0,    0,
+                                                     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    1e-9, 0,
+                                                     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    1e-9]</rosparam>
+
+    </node>
+
+  <!--  ************** gmapping  ***************  -->
+
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+    <remap from="scan" to="$(arg scan_topic)"/>
+    <param name="base_frame" value="$(arg base_frame)"/>
+    <param name="odom_frame" value="$(arg odom_frame)"/>
+    <param name="map_frame" value="$(arg map_frame)"/>
+
+    <param name="map_update_interval" value="2.0"/>
+    <param name="maxUrange" value="360.0"/>
+    <param name="maxRange" value="360.0"/>
+    <param name="sigma" value="0.05"/>
+    <param name="kernelSize" value="1"/>
+    <param name="lstep" value="0.05"/>
+    <param name="astep" value="0.05"/>
+    <param name="iterations" value="5"/>
+    <param name="lsigma" value="0.075"/>
+    <param name="ogain" value="3.0"/>
+    <param name="lskip" value="0"/>
+    <param name="minimumScore" value="200"/>
+    <param name="srr" value="0.1"/>
+    <param name="srt" value="0.2"/>
+    <param name="str" value="0.1"/>
+    <param name="stt" value="0.2"/>
+    <param name="linearUpdate" value="0.1"/>
+    <param name="angularUpdate" value="0.1"/>
+    <param name="temporalUpdate" value="-1.0"/>
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="particles" value="80"/>
+
+    <param name="xmin" value="-10.0"/>
+    <param name="ymin" value="-10.0"/>
+    <param name="xmax" value="10.0"/>
+    <param name="ymax" value="10.0"/>
+
+    <param name="delta" value="0.05"/>
+    <param name="llsamplerange" value="0.01"/>
+    <param name="llsamplestep" value="0.01"/>
+    <param name="lasamplerange" value="0.005"/>
+    <param name="lasamplestep" value="0.005"/>
+   
+
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz"/>
+
+
+
+  
+</launch>
