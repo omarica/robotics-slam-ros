@@ -15,12 +15,12 @@ The following map was obtained using gmapping_visual.launch:
 Folder /cfg contains the configuration files for move_base package
 
 Folder /launch contains:
-gmapping_optitrack.launch: Launch file for gmapping with gmapping_optitrack \n
-gmapping_visual.launch: Launch file for gmapping with visual odometry
-nav_stack.launch: Launch file for the navigation stack
-amcl.launch.xml: Configuration file for amcl, called from nav_stack.launch
+gmapping_optitrack.launch: Launch file for gmapping with gmapping_optitrack <br/>
+gmapping_visual.launch: Launch file for gmapping with visual odometry<br/>
+nav_stack.launch: Launch file for the navigation stack<br/>
+amcl.launch.xml: Configuration file for amcl, called from nav_stack.launch<br/>
 
-Folder /maps contains the map created with optitrack (map_optitrack.pgm) and the map created with visual odometry (map_visual.pgm)
+Folder /maps contains the map created with optitrack (map_optitrack.pgm) and<br/> the map created with visual odometry (map_visual.pgm)
      
 
 ------------------------------------------------------------------------------------------
