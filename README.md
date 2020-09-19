@@ -26,8 +26,8 @@ the map created with visual odometry **(map_visual.pgm)**
 ## How to start/use the nodes 	 
 ------------------------------------------------------------------------------------------
 
-For gmapping: roslaunch project_two gmapping_optitrack.launch  or
-    roslaunch project_two gmapping_visual.launch
+For gmapping: **roslaunch project_two gmapping_optitrack.launch**  or <br/>
+    **roslaunch project_two gmapping_visual.launch**
  
 
-For move_base: roslaunch project_two nav_stack.launch
+For move_base: **roslaunch project_two nav_stack.launch**
