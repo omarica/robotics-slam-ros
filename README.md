@@ -11,7 +11,6 @@ The following map was obtained using gmapping_visual.launch:
 ------------------------------------------------------------------------------------------
 ## Description of the files: 
 ------------------------------------------------------------------------------------------
-'''
 Folder **/cfg** contains the configuration files for move_base package
 
 Folder **/launch** contains: </br>
@@ -22,7 +21,7 @@ Folder **/launch** contains: </br>
 
 Folder **/maps** contains the map created with optitrack **(map_optitrack.pgm)** and<br/>
 the map created with visual odometry **(map_visual.pgm)**    
-'''
+
 ------------------------------------------------------------------------------------------
 ## How to start/use the nodes 	 
 ------------------------------------------------------------------------------------------
