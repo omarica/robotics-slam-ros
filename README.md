@@ -11,18 +11,18 @@ The following map was obtained using gmapping_visual.launch:
 ------------------------------------------------------------------------------------------
 ## Description of the files: 
 ------------------------------------------------------------------------------------------
+'''
+Folder **/cfg** contains the configuration files for move_base package
 
-Folder /cfg contains the configuration files for move_base package
+Folder **/launch** contains: </br>
+-**gmapping_optitrack.launch:** Launch file for gmapping with gmapping_optitrack <br/>
+-**gmapping_visual.launch:** Launch file for gmapping with visual odometry<br/>
+-**nav_stack.launch:** Launch file for the navigation stack<br/>
+-**amcl.launch.xml:** Configuration file for amcl, called from nav_stack.launch<br/>
 
-Folder /launch contains:
-gmapping_optitrack.launch: Launch file for gmapping with gmapping_optitrack <br/>
-gmapping_visual.launch: Launch file for gmapping with visual odometry<br/>
-nav_stack.launch: Launch file for the navigation stack<br/>
-amcl.launch.xml: Configuration file for amcl, called from nav_stack.launch<br/>
-
-Folder /maps contains the map created with optitrack (map_optitrack.pgm) and<br/> the map created with visual odometry (map_visual.pgm)
-     
-
+Folder **/maps** contains the map created with optitrack **(map_optitrack.pgm)** and<br/>
+the map created with visual odometry **(map_visual.pgm)**    
+'''
 ------------------------------------------------------------------------------------------
 ## How to start/use the nodes 	 
 ------------------------------------------------------------------------------------------
