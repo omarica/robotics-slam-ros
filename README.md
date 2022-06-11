@@ -1,4 +1,4 @@
-# ros-slam
+# robotics-slam-ros
 
 A ROS Implementation of Simultaneous Localization and Mapping using navbase and amcl.
 
